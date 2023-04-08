@@ -1,0 +1,8 @@
+org: lukhee
+app: image-optimization
+service: image-optimization
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  profile: default

@@ -1,8 +1,47 @@
 org: lukhee
 app: image-optimization
 service: image-optimization
+
+frameworkVersion: ^3.27.0
+
+plugins:
+  - serverless-webpack
+
 provider:
   name: aws
   runtime: nodejs14.x
-  stage: dev
-  profile: default
+  stage: ${opt:stage, 'dev'}
+  region: 'us-east-1'
+  # profile: default
+
+  environment:
+    IMAGE_TABLE: image-${self:provider.stage}
+
+functions:
+  GetImages:
+    handler: src/lambda/http/getImages.handler
+    events:
+      - http:
+          method: get
+          path: images
+          cors: true
+
+# resources:
+#   Resources:
+#     ImageTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         AttributeDefinitions:
+#           - AttributeName: imageId
+#             AttributeType: S
+#           - AttributeName: createdAt
+#             AttributeType: S
+#           - AttributeName: userId
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: userId
+#             KeyType: HASH
+#           - AttributeName: imageId
+#             KeyType: RANGE
+#         BillingMode: PAY_PER_REQUEST
+#         TableName: ${self:provider.environment.IMAGE_TABLE}

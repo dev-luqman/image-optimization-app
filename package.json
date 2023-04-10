@@ -1,0 +1,18 @@
+{
+  "name": "image-optimization",
+  "version": "1.0.0",
+  "description": "> This application is use to collect image from different users and optimized it to a specific size using serverless framework to aws",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-dev:dev-luqman/image-optimization-app.git"
+  },
+  "author": "Balogun Lukman",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.1354.0"
+  }
+}

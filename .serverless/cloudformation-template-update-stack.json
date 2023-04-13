@@ -77,6 +77,12 @@
         "LogGroupName": "/aws/lambda/image-optimization-dev-GetImages"
       }
     },
+    "CreateImagesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/image-optimization-dev-CreateImages"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -199,6 +205,12 @@
                         "GetImagesLogGroup",
                         "Arn"
                       ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "CreateImagesLogGroup",
+                        "Arn"
+                      ]
                     }
                   ]
                 }
@@ -215,7 +227,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/image-optimization/dev/1681418845774-2023-04-13T20:47:25.774Z/image-optimization.zip"
+          "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/image-optimization.zip"
         },
         "Handler": "s_GetImages.handler",
         "Runtime": "nodejs12.x",
@@ -238,14 +250,54 @@
         "GetImagesLogGroup"
       ]
     },
-    "GetImagesLambdaVersionkzrtwkiglA9bgv30LOc1eV3szSJ4v2RDaDwMqDk0ORw": {
+    "CreateImagesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/image-optimization.zip"
+        },
+        "Handler": "s_CreateImages.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "image-optimization-dev-CreateImages",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "IMAGE_TABLE": "Images-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CreateImagesLogGroup"
+      ]
+    },
+    "GetImagesLambdaVersion5FDE6jTjJqZLTjfWqjOn4QE5c5f6luUOHUjnqi8nxXg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetImagesLambdaFunction"
         },
-        "CodeSha256": "ME/ySi4Rq1mkRMEwYllTQU3FE3UOx6c88BeNqP1Obf0="
+        "CodeSha256": "xbyl7JyhCG3Xnh9waZ98IkWOuNaW6ZMa+FhGa0jKtzk="
+      }
+    },
+    "CreateImagesLambdaVersion5u5lIiOtg1gWOGtpGZ2aEdp01sqmpeD4h9NxJEag": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateImagesLambdaFunction"
+        },
+        "CodeSha256": "xbyl7JyhCG3Xnh9waZ98IkWOuNaW6ZMa+FhGa0jKtzk="
       }
     },
     "ApiGatewayRestApi": {
@@ -304,7 +356,7 @@
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Origin": "'*'",
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST,GET'"
               },
               "ResponseTemplates": {
                 "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
@@ -363,7 +415,59 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1681418830203": {
+    "ApiGatewayMethodImagesPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceImages"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "CreateImagesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": [],
+        "RequestModels": {
+          "application/json": "GroupRequest"
+        },
+        "RequestValidatorId": {
+          "Ref": "RequestBodyValidator"
+        }
+      },
+      "DependsOn": [
+        "GroupRequestModel"
+      ]
+    },
+    "ApiGatewayDeployment1681427442919": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -373,7 +477,8 @@
       },
       "DependsOn": [
         "ApiGatewayMethodImagesOptions",
-        "ApiGatewayMethodImagesGet"
+        "ApiGatewayMethodImagesGet",
+        "ApiGatewayMethodImagesPost"
       ]
     },
     "GetImagesLambdaPermissionApiGateway": {
@@ -382,6 +487,43 @@
         "FunctionName": {
           "Fn::GetAtt": [
             "GetImagesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "CreateImagesLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateImagesLambdaFunction",
             "Arn"
           ]
         },
@@ -522,7 +664,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/image-optimization/dev/1681418845774-2023-04-13T20:47:25.774Z/custom-resources.zip"
+          "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/custom-resources.zip"
         },
         "FunctionName": "image-optimization-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -539,6 +681,41 @@
       "DependsOn": [
         "IamRoleCustomResourcesLambdaExecution"
       ]
+    },
+    "ImageRequestModel": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ContentType": "Application/json",
+        "Name": "ImageRequest",
+        "Schema": {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "title": "my-type",
+          "type": "object",
+          "properties": {
+            "imageUrl": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "imageUrl"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "RequestBodyValidator": {
+      "Type": "AWS::ApiGateway::RequestValidator",
+      "Properties": {
+        "Name": "request-body-validator",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "validateRequestBody": true,
+        "validateRequestParameters": false
+      }
     },
     "ImagesTable": {
       "Type": "AWS::DynamoDB::Table",
@@ -577,6 +754,16 @@
         }
       }
     },
+    "CloudWatchLogsSubscriptionFilterCreateImagesLogGroup": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:31569b54-b095-4d31-aa59-b64716c23adf#SGY20vhVkC27khvLgc#image-optimization#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "CreateImagesLogGroup"
+        }
+      }
+    },
     "CloudWatchLogsSubscriptionFilterApiGatewayLogGroup": {
       "Type": "AWS::Logs::SubscriptionFilter",
       "Properties": {
@@ -605,7 +792,13 @@
     "GetImagesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetImagesLambdaVersionkzrtwkiglA9bgv30LOc1eV3szSJ4v2RDaDwMqDk0ORw"
+        "Ref": "GetImagesLambdaVersion5FDE6jTjJqZLTjfWqjOn4QE5c5f6luUOHUjnqi8nxXg"
+      }
+    },
+    "CreateImagesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateImagesLambdaVersion5u5lIiOtg1gWOGtpGZ2aEdp01sqmpeD4h9NxJEag"
       }
     },
     "ServiceEndpoint": {
@@ -629,6 +822,12 @@
             "/dev"
           ]
         ]
+      }
+    },
+    "AwsDocApiId": {
+      "Description": "API ID",
+      "Value": {
+        "Ref": "ApiGatewayRestApi"
       }
     }
   }

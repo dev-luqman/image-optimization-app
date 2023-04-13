@@ -30,6 +30,16 @@ provider:
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
 
 custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Image Api
+        description: Serverless application for image sharing
+    models:
+      - name: ImageRequest
+        contentType: Application/json
+        schema: ${file(models/create-group-request.json)}
 
 functions:
   GetImages:
@@ -47,8 +57,24 @@ functions:
           method: post
           path: images
           cors: true
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new image
+            description: Create a new image
+            requestModels:
+              'application/json': GroupRequest
+
 resources:
   Resources:
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        validateRequestBody: true
+        validateRequestParameters: false
+
     ImagesTable:
       Type: AWS::DynamoDB::Table
       Properties:

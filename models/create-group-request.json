@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "my-type",
+  "type": "object",
+  "properties": {
+    "imageUrl": {
+      "type": "string"
+    }
+  },
+  "required": ["imageUrl"],
+  "additionalProperties": false
+}

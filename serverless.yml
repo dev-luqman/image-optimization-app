@@ -5,6 +5,10 @@ org: lukhee
 
 frameworkVersion: '2'
 
+plugins:
+  - serverless-aws-documentation
+  - serverless-reqvalidator-plugin
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -24,6 +28,8 @@ provider:
             - dynamodb:Scan
             - dynamodb:PutItem
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
+
+custom:
 
 functions:
   GetImages:
@@ -54,7 +60,7 @@ resources:
         KeySchema:
           - AttributeName: createdAt
             KeyType: HASH
-          - AttributeName: imageId
+          - AttributeName: imageUrl
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.IMAGE_TABLE}

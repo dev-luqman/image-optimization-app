@@ -19,7 +19,8 @@
             {
               "Effect": "Allow",
               "Action": [
-                "dynamodb:Scan"
+                "dynamodb:Scan",
+                "dynamodb:PutItem"
               ],
               "Resource": "arn:aws:dynamodb:us-east-1:*:table/Images-dev"
             }
@@ -240,7 +241,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/image-optimization/dev/1681166939253-2023-04-10T22:48:59.253Z/image-optimization.zip"
+                "S3Key": "serverless/image-optimization/dev/1681418845774-2023-04-13T20:47:25.774Z/image-optimization.zip"
               },
               "Handler": "s_GetImages.handler",
               "Runtime": "nodejs12.x",
@@ -263,14 +264,14 @@
               "GetImagesLogGroup"
             ]
           },
-          "GetImagesLambdaVersion1y7qO0AANJFxAh4fURJDWc3a7PBRa7b32OTl2wv0tw": {
+          "GetImagesLambdaVersionkzrtwkiglA9bgv30LOc1eV3szSJ4v2RDaDwMqDk0ORw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetImagesLambdaFunction"
               },
-              "CodeSha256": "IE8IqxFo7oedWJ8hZAeeaWnDAtzJia2tWTTNvhcQ7TI="
+              "CodeSha256": "ME/ySi4Rq1mkRMEwYllTQU3FE3UOx6c88BeNqP1Obf0="
             }
           },
           "ApiGatewayRestApi": {
@@ -388,7 +389,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1681166923344": {
+          "ApiGatewayDeployment1681418830203": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -547,7 +548,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/image-optimization/dev/1681166939253-2023-04-10T22:48:59.253Z/custom-resources.zip"
+                "S3Key": "serverless/image-optimization/dev/1681418845774-2023-04-13T20:47:25.774Z/custom-resources.zip"
               },
               "FunctionName": "image-optimization-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -570,7 +571,7 @@
             "Properties": {
               "AttributeDefinitions": [
                 {
-                  "AttributeName": "imageId",
+                  "AttributeName": "imageUrl",
                   "AttributeType": "S"
                 },
                 {
@@ -584,7 +585,7 @@
                   "KeyType": "HASH"
                 },
                 {
-                  "AttributeName": "imageId",
+                  "AttributeName": "imageUrl",
                   "KeyType": "RANGE"
                 }
               ],
@@ -630,7 +631,7 @@
           "GetImagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetImagesLambdaVersion1y7qO0AANJFxAh4fURJDWc3a7PBRa7b32OTl2wv0tw"
+              "Ref": "GetImagesLambdaVersionkzrtwkiglA9bgv30LOc1eV3szSJ4v2RDaDwMqDk0ORw"
             }
           },
           "ServiceEndpoint": {
@@ -785,7 +786,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetImagesLambdaVersion1y7qO0AANJFxAh4fURJDWc3a7PBRa7b32OTl2wv0tw"
+        "versionLogicalId": "GetImagesLambdaVersionkzrtwkiglA9bgv30LOc1eV3szSJ4v2RDaDwMqDk0ORw"
       }
     },
     "resources": {
@@ -795,7 +796,7 @@
           "Properties": {
             "AttributeDefinitions": [
               {
-                "AttributeName": "imageId",
+                "AttributeName": "imageUrl",
                 "AttributeType": "S"
               },
               {
@@ -809,7 +810,7 @@
                 "KeyType": "HASH"
               },
               {
-                "AttributeName": "imageId",
+                "AttributeName": "imageUrl",
                 "KeyType": "RANGE"
               }
             ],
@@ -849,7 +850,7 @@
     "artifact": "/Users/balogunluqman/Desktop/serverless/image-optimization/.serverless/image-optimization.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/image-optimization/dev/1681166939253-2023-04-10T22:48:59.253Z",
+    "artifactDirectoryName": "serverless/image-optimization/dev/1681418845774-2023-04-13T20:47:25.774Z",
     "artifact": "image-optimization.zip"
   }
 }

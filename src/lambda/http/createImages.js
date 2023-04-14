@@ -1,6 +1,6 @@
 'use strict';
 
-import { createImageHandler } from '../../helperFunction/imageDbAccess';
+const imageDbAccess = require('../../helperFunction/imageDbAccess.js');
 
 module.exports.handler = async (event) => {
   console.log('Start Creating Image Collection...', event);
@@ -8,11 +8,11 @@ module.exports.handler = async (event) => {
   let image = JSON.parse(event.body);
 
   let ImageItems = {
-    image: image.imageUrl,
+    imageUrl: image.imageUrl,
     createdAt: new Date().toISOString(),
   };
 
-  const result = await createImageHandler(ImageItems);
+  const result = await imageDbAccess.createImageHandler(ImageItems);
   return {
     statusCode: 200,
     body: JSON.stringify({

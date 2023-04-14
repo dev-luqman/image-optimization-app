@@ -253,7 +253,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/image-optimization.zip"
+                "S3Key": "serverless/image-optimization/dev/1681507527207-2023-04-14T21:25:27.207Z/image-optimization.zip"
               },
               "Handler": "s_GetImages.handler",
               "Runtime": "nodejs12.x",
@@ -283,7 +283,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/image-optimization.zip"
+                "S3Key": "serverless/image-optimization/dev/1681507527207-2023-04-14T21:25:27.207Z/image-optimization.zip"
               },
               "Handler": "s_CreateImages.handler",
               "Runtime": "nodejs12.x",
@@ -306,24 +306,24 @@
               "CreateImagesLogGroup"
             ]
           },
-          "GetImagesLambdaVersion5FDE6jTjJqZLTjfWqjOn4QE5c5f6luUOHUjnqi8nxXg": {
+          "GetImagesLambdaVersionO5P1BGdbzpnY18adKvTtTAxVdoUxlPvaMtF5mQMuKfk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetImagesLambdaFunction"
               },
-              "CodeSha256": "xbyl7JyhCG3Xnh9waZ98IkWOuNaW6ZMa+FhGa0jKtzk="
+              "CodeSha256": "PplH/CFg3NdWjWxgePd59uO3Q2lfgOLeBcKBxLedfOQ="
             }
           },
-          "CreateImagesLambdaVersion5u5lIiOtg1gWOGtpGZ2aEdp01sqmpeD4h9NxJEag": {
+          "CreateImagesLambdaVersionHk8e6gTSNUkpyZNTCuKIuJFIRUKFZEMaJks7fOo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateImagesLambdaFunction"
               },
-              "CodeSha256": "xbyl7JyhCG3Xnh9waZ98IkWOuNaW6ZMa+FhGa0jKtzk="
+              "CodeSha256": "PplH/CFg3NdWjWxgePd59uO3Q2lfgOLeBcKBxLedfOQ="
             }
           },
           "ApiGatewayRestApi": {
@@ -483,17 +483,17 @@
               },
               "MethodResponses": [],
               "RequestModels": {
-                "application/json": "GroupRequest"
+                "application/json": "ImageRequest"
               },
               "RequestValidatorId": {
                 "Ref": "RequestBodyValidator"
               }
             },
             "DependsOn": [
-              "GroupRequestModel"
+              "ImageRequestModel"
             ]
           },
-          "ApiGatewayDeployment1681427442919": {
+          "ApiGatewayDeployment1681507512510": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -690,7 +690,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z/custom-resources.zip"
+                "S3Key": "serverless/image-optimization/dev/1681507527207-2023-04-14T21:25:27.207Z/custom-resources.zip"
               },
               "FunctionName": "image-optimization-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -728,7 +728,7 @@
                 "required": [
                   "imageUrl"
                 ],
-                "additionalProperties": false
+                "additionalProperties": true
               }
             }
           },
@@ -739,8 +739,8 @@
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               },
-              "validateRequestBody": true,
-              "validateRequestParameters": false
+              "ValidateRequestBody": true,
+              "ValidateRequestParameters": false
             }
           },
           "ImagesTable": {
@@ -818,13 +818,13 @@
           "GetImagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetImagesLambdaVersion5FDE6jTjJqZLTjfWqjOn4QE5c5f6luUOHUjnqi8nxXg"
+              "Ref": "GetImagesLambdaVersionO5P1BGdbzpnY18adKvTtTAxVdoUxlPvaMtF5mQMuKfk"
             }
           },
           "CreateImagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateImagesLambdaVersion5u5lIiOtg1gWOGtpGZ2aEdp01sqmpeD4h9NxJEag"
+              "Ref": "CreateImagesLambdaVersionHk8e6gTSNUkpyZNTCuKIuJFIRUKFZEMaJks7fOo"
             }
           },
           "ServiceEndpoint": {
@@ -1009,7 +1009,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetImagesLambdaVersion5FDE6jTjJqZLTjfWqjOn4QE5c5f6luUOHUjnqi8nxXg"
+        "versionLogicalId": "GetImagesLambdaVersionO5P1BGdbzpnY18adKvTtTAxVdoUxlPvaMtF5mQMuKfk"
       },
       "CreateImages": {
         "handler": "s_CreateImages.handler",
@@ -1055,7 +1055,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "CreateImagesLambdaVersion5u5lIiOtg1gWOGtpGZ2aEdp01sqmpeD4h9NxJEag"
+        "versionLogicalId": "CreateImagesLambdaVersionHk8e6gTSNUkpyZNTCuKIuJFIRUKFZEMaJks7fOo"
       }
     },
     "resources": {
@@ -1067,8 +1067,8 @@
             "RestApiId": {
               "Ref": "ApiGatewayRestApi"
             },
-            "validateRequestBody": true,
-            "validateRequestParameters": false
+            "ValidateRequestBody": true,
+            "ValidateRequestParameters": false
           }
         },
         "ImagesTable": {
@@ -1136,7 +1136,7 @@
     "artifact": "/Users/balogunluqman/Desktop/serverless/image-optimization/.serverless/image-optimization.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/image-optimization/dev/1681427455710-2023-04-13T23:10:55.710Z",
+    "artifactDirectoryName": "serverless/image-optimization/dev/1681507527207-2023-04-14T21:25:27.207Z",
     "artifact": "image-optimization.zip"
   }
 }

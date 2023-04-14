@@ -8,5 +8,5 @@
     }
   },
   "required": ["imageUrl"],
-  "additionalProperties": false
+  "additionalProperties": true
 }

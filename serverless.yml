@@ -62,7 +62,7 @@ functions:
             summary: Create a new image
             description: Create a new image
             requestModels:
-              'application/json': GroupRequest
+              'application/json': ImageRequest
 
 resources:
   Resources:
@@ -72,8 +72,8 @@ resources:
         Name: 'request-body-validator'
         RestApiId:
           Ref: ApiGatewayRestApi
-        validateRequestBody: true
-        validateRequestParameters: false
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
 
     ImagesTable:
       Type: AWS::DynamoDB::Table

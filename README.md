@@ -23,18 +23,13 @@ The project code base is mainly located within the `src` folder. This folder is 
 │   │   │   ├── deleteImages.js   # `deleteImages` lambda source code
 │   │   │   └── schema.ts         # `Hello` lambda input event JSON-Schema
 │   │   │
-│   │   └── index.ts            # Import/export of all lambda configurations
+│   │   ├── helperFunction        # lambda helper configurations to DB access
+│   │   │    └── ImageDbAccess.js # `CreateImage` DB access creation
+│   │   └── index.ts              # Lambda configuration and source code folder
 │   │
-│   └── libs                    # Lambda shared code
-│       └── apiGateway.ts       # API Gateway specific helpers
-│       └── handlerResolver.ts  # Sharable library for resolving lambda handlers
-│       └── lambda.ts           # Lambda middleware
+│   └── Models                    # Lambda shared code
+│       └── create-group-request.ts       # API Gateway specific helpers validator
 │
 ├── package.json
 └── serverless.yml              # Serverless service file
 ```
-
-curl -H 'Content-Type: application/json' \
- -d '{ "imageUrl":"First Image"}' \
- -X POST \
-https://iw35vua712.execute-api.us-east-1.amazonaws.com/dev/images

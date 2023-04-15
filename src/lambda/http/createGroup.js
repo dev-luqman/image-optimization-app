@@ -10,7 +10,7 @@ module.exports.handler = async (event) => {
   let ImageItems = {
     name: groupDate.name,
     id: uuid(),
-    description: groupDate.name,
+    description: groupDate.description,
   };
 
   const result = await GroupDbAccess.createGroupHandler(ImageItems);

@@ -33,6 +33,7 @@ provider:
         - Effect: Allow
           Action:
             # - dynamodb:Get
+            - dynamodb:PutItem
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}
 
@@ -47,7 +48,9 @@ custom:
       - name: GroupImageRequest
         contentType: Application/json
         schema: ${file(models/create-group-request.json)}
-
+      - name: ImageRequestValidator
+        contentType: Application/json
+        schema: ${file(models/create-images-request.json)}
 functions:
   GetGroup:
     handler: src/lambda/http/getGroup.handler
@@ -67,7 +70,7 @@ functions:
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: Create a new Group
-            description: Create a new image
+            description: Create a new group
             requestModels:
               'application/json': GroupImageRequest
 
@@ -78,6 +81,20 @@ functions:
           method: get
           path: group/{groupId}/image
           cors: true
+
+  CreateImages:
+    handler: src/lambda/http/createImages.handler
+    events:
+      - http:
+          method: post
+          path: group/{groupId}/image
+          cors: true
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new Images
+            description: Create a new image
+            requestModels:
+              'application/json': ImageRequestValidator
 
 resources:
   Resources:
@@ -126,3 +143,9 @@ resources:
         #         KeyType: HASH
         #     Projection:
         #       ProjectionType: ALL
+# https://p8fb83xqya.execute-api.us-east-1.amazonaws.com/dev/group/{groupId}/image
+
+#  curl -H 'Content-Type: application/json' \
+#       -d '{ "imageUrl":"http://testing.com"}' \
+#       -X POST \
+#       https://p8fb83xqya.execute-api.us-east-1.amazonaws.com/dev/group/48895d44-54ae-4444-9305-651221c735/image

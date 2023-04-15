@@ -1,17 +1,24 @@
 'use strict';
-// import * as AWS from 'aws-sdk';
+
 const AWS = require('aws-sdk');
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const images_table = process.env.IMAGES_TABLE;
+const { uuid } = require('uuidv4');
+
+const GroupDbAccess = require('../../helperFunction/GroupDbAccess.js');
+
 const group_table = process.env.GROUP_TABLE;
 
 module.exports.handler = async (event) => {
-  console.log('Start Processing Images Collection...', event);
+  console.log('Start Creating Image Collection...', event);
 
+  let imageData = JSON.parse(event.body);
   const groupId = event.pathParameters.groupId;
 
+  // check if groupId exit
   const validGroupId = await groupExit(groupId);
+
+  console.log('validGroupId', validGroupId);
 
   if (!validGroupId) {
     return {
@@ -22,19 +29,28 @@ module.exports.handler = async (event) => {
     };
   }
 
-  //Fetch images
-  const images = getImagesPerGroup(groupId);
+  let ImageItems = {
+    groupId: groupId,
+    imageUrl: imageData.imageUrl,
+    id: uuid(),
+    timestamp: new Date(),
+  };
 
+  const result = await GroupDbAccess.createImagesHandler(ImageItems);
+
+  console.log(result);
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'GET ALL IMAGE',
-      items: images,
+      message: 'Create Image successfully',
+      item: result,
     }),
   };
 };
 
 const groupExit = async (groupId) => {
+  console.log('groupExit', groupId);
+
   const result = await docClient
     .get({
       TableName: group_table,
@@ -45,19 +61,4 @@ const groupExit = async (groupId) => {
     .promise();
 
   return !!result.Item;
-};
-
-const getImagesPerGroup = async (groupId) => {
-  const result = await docClient
-    .query({
-      TableName: images_table,
-      KeyConditionExpression: 'groupId = :groupId',
-      ExpressionAttributeValues: {
-        ':groupId': groupId,
-      },
-      ScanIndexForward: false,
-    })
-    .promise();
-
-  return result;
 };

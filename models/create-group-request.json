@@ -3,10 +3,13 @@
   "title": "my-type",
   "type": "object",
   "properties": {
-    "imageUrl": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
       "type": "string"
     }
   },
-  "required": ["imageUrl"],
-  "additionalProperties": true
+  "required": ["name"],
+  "additionalProperties": false
 }

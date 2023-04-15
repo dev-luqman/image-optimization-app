@@ -3,16 +3,16 @@
 const AWS = require('aws-sdk');
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const table_name = process.env.IMAGE_TABLE;
+const table_name = process.env.GROUP_TABLE;
 
-const createImageHandler = async (todoItem) => {
+const createGroupHandler = async (groupItem) => {
   await docClient
     .put({
       TableName: table_name,
-      Item: todoItem,
+      Item: groupItem,
     })
     .promise();
-  return todoItem;
+  return groupItem;
 };
 
-module.exports = { createImageHandler };
+module.exports = { createGroupHandler };

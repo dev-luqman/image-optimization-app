@@ -27,13 +27,14 @@ provider:
         - Effect: Allow
           Action:
             - dynamodb:Scan
+            - dynamodb:GetItem
             - dynamodb:PutItem
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GROUP_TABLE}
         - Effect: Allow
           Action:
-            - dynamodb:Get
+            # - dynamodb:Get
             - dynamodb:Query
-          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GROUP_TABLE}
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}
 
 custom:
   documentation:
@@ -71,7 +72,7 @@ functions:
               'application/json': GroupImageRequest
 
   GetImages:
-    handler: src/lambda/http/getGroup.handler
+    handler: src/lambda/http/getImages.handler
     events:
       - http:
           method: get
@@ -109,8 +110,8 @@ resources:
             AttributeType: S
           - AttributeName: timestamp
             AttributeType: S
-          - AttributeName: imageId
-            AttributeType: S
+          # - AttributeName: imageId
+          #   AttributeType: S
         KeySchema:
           - AttributeName: groupId
             KeyType: HASH

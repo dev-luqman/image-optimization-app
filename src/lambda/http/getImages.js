@@ -12,6 +12,7 @@ module.exports.handler = async (event) => {
   const groupId = event.pathParameters.groupId;
 
   const validGroupId = await groupExit(groupId);
+  console.log('valid Group id', validGroupId);
 
   if (!validGroupId) {
     return {
@@ -23,7 +24,7 @@ module.exports.handler = async (event) => {
   }
 
   //Fetch images
-  const images = getImagesPerGroup;
+  const images = getImagesPerGroup(groupId);
 
   return {
     statusCode: 200,
@@ -38,14 +39,15 @@ const groupExit = async (groupId) => {
   const result = await docClient
     .get({
       TableName: group_table,
-      key: {
+      Key: {
         id: groupId,
       },
     })
     .promise();
-  console.log('group id', result);
 
-  return !!result;
+  console.log('result', result);
+
+  return !!result.Item;
 };
 
 const getImagesPerGroup = async (groupId) => {

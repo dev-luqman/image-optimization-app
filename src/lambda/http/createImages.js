@@ -32,7 +32,7 @@ module.exports.handler = async (event) => {
   let ImageItems = {
     groupId: groupId,
     imageUrl: imageData.imageUrl,
-    id: uuid(),
+    imageId: uuid(),
     timestamp: new Date().toString(),
   };
 

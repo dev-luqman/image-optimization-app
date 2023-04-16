@@ -23,7 +23,7 @@ module.exports.handler = async (event) => {
   }
 
   //Fetch images
-  const images = getImagesPerGroup(groupId);
+  const images = await getImagesPerGroup(groupId);
 
   return {
     statusCode: 200,
@@ -48,6 +48,7 @@ const groupExit = async (groupId) => {
 };
 
 const getImagesPerGroup = async (groupId) => {
+  console.log('groupId', groupId);
   const result = await docClient
     .query({
       TableName: images_table,
@@ -58,6 +59,7 @@ const getImagesPerGroup = async (groupId) => {
       ScanIndexForward: false,
     })
     .promise();
+  console.log('result', result);
 
   return result;
 };

@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const table_name = process.env.GROUP_TABLE;
-const image_name = process.env.IMAGE_TABLE;
+const image_name = process.env.IMAGES_TABLE;
 
 const createGroupHandler = async (groupItem) => {
   await docClient

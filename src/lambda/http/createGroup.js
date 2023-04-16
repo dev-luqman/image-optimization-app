@@ -15,7 +15,7 @@ module.exports.handler = async (event) => {
 
   const result = await GroupDbAccess.createGroupHandler(ImageItems);
   return {
-    statusCode: 200,
+    statusCode: 201,
     body: JSON.stringify({
       message: 'Create Group successfully',
       item: result,

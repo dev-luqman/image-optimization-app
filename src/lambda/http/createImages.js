@@ -33,14 +33,14 @@ module.exports.handler = async (event) => {
     groupId: groupId,
     imageUrl: imageData.imageUrl,
     id: uuid(),
-    timestamp: new Date(),
+    timestamp: new Date().toString(),
   };
 
   const result = await GroupDbAccess.createImagesHandler(ImageItems);
 
   console.log(result);
   return {
-    statusCode: 200,
+    statusCode: 201,
     body: JSON.stringify({
       message: 'Create Image successfully',
       item: result,

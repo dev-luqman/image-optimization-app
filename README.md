@@ -33,3 +33,17 @@ The project code base is mainly located within the `src` folder. This folder is 
 ├── package.json
 └── serverless.yml              # Serverless service file
 ```
+
+<!-- curl --header "Content-Type: application/json" \
+ --request POST \
+ --data '{"name":"sample-1","description":"Sample group 1"}' \
+https://xa6pnsjf8j.execute-api.us-east-1.amazonaws.com/dev/group -->
+
+<!-- curl https://xa6pnsjf8j.execute-api.us-east-1.amazonaws.com/dev/group/600da36c-e2dc-4b1a-875e-344fb421b31d/image -->
+
+<!-- curl --header "Content-Type: application/json" \
+ --request POST \
+ --data '{"imageUrl":"1 image url","description":"Sample group 1"}' \
+https://xa6pnsjf8j.execute-api.us-east-1.amazonaws.com/dev/group/600da36c-e2dc-4b1a-875e-344fb421b31d/image -->
+
+<!-- curl https://xa6pnsjf8j.execute-api.us-east-1.amazonaws.com/dev/images/29442ebc-212c-4b32-8bf5-f226e50220e8 -->

@@ -48,7 +48,6 @@ const groupExit = async (groupId) => {
 };
 
 const getImagesPerGroup = async (groupId) => {
-  console.log('groupId', groupId);
   const result = await docClient
     .query({
       TableName: images_table,
@@ -59,7 +58,6 @@ const getImagesPerGroup = async (groupId) => {
       ScanIndexForward: false,
     })
     .promise();
-  console.log('result', result);
 
   return result;
 };

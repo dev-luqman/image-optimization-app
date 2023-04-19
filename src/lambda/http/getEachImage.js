@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const index_images_table = process.env.IMAGE_ID_INDEX;
+const images_table = process.env.IMAGES_TABLE;
 
 module.exports.handler = async (event) => {
   console.log('Start Processing Each Image Collection...', event);
@@ -12,14 +13,12 @@ module.exports.handler = async (event) => {
 
   const result = await getEachImageHandler(imageId);
 
-  console.log(result);
-
-  if (result.Item.length > 0) {
+  if (result.Count > 0) {
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: 'GET EACH IMAGE',
-        items: result.Item,
+        items: result.Items,
       }),
     };
   }
@@ -33,10 +32,10 @@ module.exports.handler = async (event) => {
 };
 
 const getEachImageHandler = async (imageId) => {
-  console.log('imageId', imageId);
   const result = await docClient
     .query({
-      TableName: index_images_table,
+      TableName: images_table,
+      IndexName: index_images_table,
       KeyConditionExpression: 'imageId = :imageId',
       ExpressionAttributeValues: {
         ':imageId': imageId,
@@ -44,7 +43,6 @@ const getEachImageHandler = async (imageId) => {
       ScanIndexForward: false,
     })
     .promise();
-  console.log('result', result);
 
   return result;
 };

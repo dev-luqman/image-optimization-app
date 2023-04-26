@@ -6,6 +6,9 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 const { uuid } = require('uuidv4');
 
 const GroupDbAccess = require('../../helperFunction/GroupDbAccess.js');
+const {
+  S3BucketImageUpload,
+} = require('../../helperFunction/attachmentUtil.js');
 
 const group_table = process.env.GROUP_TABLE;
 
@@ -29,11 +32,12 @@ module.exports.handler = async (event) => {
     };
   }
 
+  const s3BucketUrl = S3BucketImageUpload(imageId);
   let ImageItems = {
     groupId: groupId,
-    imageUrl: imageData.imageUrl,
+    imageUrl: s3BucketUrl.uploadUrl,
     imageId: uuid(),
-    timestamp: new Date().toString(),
+    timestamp: new Date().toISOString(),
   };
 
   const result = await GroupDbAccess.createImagesHandler(ImageItems);
@@ -44,6 +48,7 @@ module.exports.handler = async (event) => {
     body: JSON.stringify({
       message: 'Create Image successfully',
       item: result,
+      uploadedUrl: s3BucketUrl.s3SignedUrl,
     }),
   };
 };

@@ -21,6 +21,8 @@ provider:
     GROUP_TABLE: group-${self:provider.stage}
     IMAGES_TABLE: images-${self:provider.stage}
     IMAGE_ID_INDEX: ImageIdIndex
+    IMAGE_S3_BUCKET: serverless-images-${self:provider.stage}
+    SIGNED_URL_EXPIRATION: 300
 
   iam:
     role:
@@ -41,6 +43,11 @@ provider:
           Action:
             - dynamodb:Query
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
+
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource: arn:aws:s3:::${self:provider.environment.IMAGE_S3_BUCKET}/*
 custom:
   documentation:
     api:
@@ -155,9 +162,33 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-# https://p8fb83xqya.execute-api.us-east-1.amazonaws.com/dev/group/{groupId}/image
-
-#  curl -H 'Content-Type: application/json' \
-#       -d '{ "imageUrl":"http://testing.com"}' \
-#       -X POST \
-#       https://p8fb83xqya.execute-api.us-east-1.amazonaws.com/dev/group/48895d44-54ae-4444-9305-651221c735/image
+    AttachmentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.IMAGE_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+    # BucketPolicy:
+    #   Type: AWS::S3::BucketPolicy
+    #   Properties:
+    #     PolicyDocument:
+    #       Id: MyPolicy
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Sid: PublicReadForGetBucketObjects
+    #           Effect: Allow
+    #           Principal: '*'
+    #           Action: 's3:GetObject'
+    #           Resource: 'arn:aws:s3:::${self:provider.environment.IMAGE_S3_BUCKET}/*'
+    #     Bucket: !Ref AttachmentsBucket

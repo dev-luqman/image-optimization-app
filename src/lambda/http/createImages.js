@@ -32,11 +32,13 @@ module.exports.handler = async (event) => {
     };
   }
 
+  let imageId = uuid();
+
   const s3BucketUrl = S3BucketImageUpload(imageId);
   let ImageItems = {
     groupId: groupId,
     imageUrl: s3BucketUrl.uploadUrl,
-    imageId: uuid(),
+    imageId: imageId,
     timestamp: new Date().toISOString(),
   };
 

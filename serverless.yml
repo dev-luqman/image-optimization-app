@@ -123,6 +123,10 @@ functions:
               'application/json': ImageRequestValidator
 
   SendUploadNotifications:
+    environment:
+      STAGE: ${self:provider.stage}
+      API_ID:
+        Ref: WebsocketsApi
     handler: src/s3/sendNotifications.handler
 
   ConnectHandler:

@@ -27,6 +27,13 @@ The project code base is mainly located within the `src` folder. This folder is 
 │   │   │    └── ImageDbAccess.js # `CreateImage` DB access creation
 │   │   └── index.ts              # Lambda configuration and source code folder
 │   │
+│   ├── S3                        # Lambda s3Bucket and source code folder
+│   │   └──  SendNotification.js
+│   │
+│   ├── webSocket                 # `CreateImages` lambda source code
+│   │     ├── connect.js          # `connect WebSocket` lambda source code
+│   │     └── disconnect.js       # `disconnect WebSocket` lambda source code
+│   │
 │   └── Models                    # Lambda shared code
 │       └── create-group-request.ts       # API Gateway specific helpers validator
 │
